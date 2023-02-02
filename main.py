@@ -1,12 +1,12 @@
 import os
 
-BOARD = [
+board = [
     [" ", " ", " "],
     [" ", " ", " "],
     [" ", " ", " "],
 ]
-PLAYER1_TURN = True
-ASCII_ART = """\
+player1_turn = True
+ascii_art = """\
 ___________.__               ___________                     ___________            
 \__    ___/|__| ____         \__    ___/____    ____         \__    ___/___   ____  
   |    |   |  |/ ___\   ______ |    |  \__  \ _/ ___\   ______ |    | /  _ \_/ __ \ 
@@ -14,6 +14,7 @@ ___________.__               ___________                     ___________
   |____|   |__|\___  >         |____|  (____  /\___  >         |____| \____/ \___  >
                    \/                       \/     \/                            \/ 
 """
+wants_to_play = True
 
 
 def print_board():
@@ -21,9 +22,9 @@ def print_board():
     for row in range(3):
         for col in range(3):
             if col < 2:
-                print(f"{BOARD[row][col]} | ", end="")
+                print(f"{board[row][col]} | ", end="")
             else:
-                print(f"{BOARD[row][col]} | ")
+                print(f"{board[row][col]} | ")
         if row < 2:
             print("-----------")
 
@@ -34,57 +35,56 @@ def check_coordinates(coordinates):
     col = int(coordinates[2])
     if len(coordinates) != 3 or coordinates[1] != " ":
         print("Please try again and provide correct coordinates in format 'row col' (ex. 1 3).")
-        ask_coordinates(PLAYER1_TURN)
+        ask_coordinates(player1_turn)
     elif 0 < row < 4 and 0 < col < 4:
-        if "x" in BOARD[row-1][col-1] or "o" in BOARD[row-1][col-1]:
-            print(f"Sorry, '{BOARD[row-1][col-1].strip(' ')}' already exists in that spot.")
-            ask_coordinates(PLAYER1_TURN)
+        if "x" in board[row-1][col-1] or "o" in board[row-1][col-1]:
+            print(f"Sorry, '{board[row-1][col-1].strip(' ')}' already exists in that spot.")
+            ask_coordinates(player1_turn)
         else:
-            print_coordinates(coordinates, PLAYER1_TURN)
+            print_coordinates(coordinates, player1_turn)
 
 
-def ask_coordinates(PLAYER1_TURN):
+def ask_coordinates(player1_turn):
     """Asks the user for coordinates."""
-    if PLAYER1_TURN:
+    if player1_turn:
         coordinates = input("Player's 1 turn. Please provide 'X' coordinates in the following format 'row col': ")
     else:
         coordinates = input("Player's 2 turn. Please provide 'O' coordinates in the following format 'row col': ")
     try:
         check_coordinates(coordinates)
-        # print_coordinates(coordinates, PLAYER1_TURN)
     except (IndexError, ValueError):
         print("Please try again and provide correct coordinates in format 'row col' (ex. 1 3).")
-        ask_coordinates(PLAYER1_TURN)
+        ask_coordinates(player1_turn)
 
 
-def print_coordinates(coordinates, PLAYER1_TURN):
+def print_coordinates(coordinates, player1_turn):
     """Adds the symbol into the board."""
-    if PLAYER1_TURN:
-        BOARD[int(coordinates[0])-1][int(coordinates[2])-1] = "x"
+    if player1_turn:
+        board[int(coordinates[0])-1][int(coordinates[2])-1] = "x"
     else:
-        BOARD[int(coordinates[0])-1][int(coordinates[2])-1] = "o"
+        board[int(coordinates[0])-1][int(coordinates[2])-1] = "o"
 
 
 def game_over():
     """Checks if it's game over or not."""
-    if " " not in BOARD[0][:] and " " not in BOARD[1][:] and " " not in BOARD[2][:]:
-        print(ASCII_ART)
+    if " " not in board[0][:] and " " not in board[1][:] and " " not in board[2][:]:
+        print(ascii_art)
         print_board()
         print("Draw!")
         return True
-    elif BOARD[0][0] == BOARD[1][1] == BOARD[2][2] != " " or BOARD[2][0] == BOARD[1][1] == BOARD[0][2] != " ":
-        print(ASCII_ART)
+    elif board[0][0] == board[1][1] == board[2][2] != " " or board[2][0] == board[1][1] == board[0][2] != " ":
+        print(ascii_art)
         print_board()
-        if BOARD[1][1] == "x":
+        if board[1][1] == "x":
             print("Player 1 win!")
         else:
             print("Player 2 win!")
         return True
     for i in range(3):
-        if BOARD[i][0] == BOARD[i][1] == BOARD[i][2] != " " or BOARD[0][i] == BOARD[1][i] == BOARD[2][i] != " ":
-            print(ASCII_ART)
+        if board[i][0] == board[i][1] == board[i][2] != " " or board[0][i] == board[1][i] == board[2][i] != " ":
+            print(ascii_art)
             print_board()
-            if BOARD[i][0] == "x" or BOARD[0][i] == "x":
+            if board[i][0] == "x" or board[0][i] == "x":
                 print("Player 1 win!")
             else:
                 print("Player 2 win!")
@@ -92,9 +92,26 @@ def game_over():
     return False
 
 
-while not game_over():
-    print(ASCII_ART)
-    print_board()
-    ask_coordinates(PLAYER1_TURN)
-    PLAYER1_TURN = not PLAYER1_TURN
-    os.system('cls' if os.name == 'nt' else 'clear')
+while wants_to_play:
+    if not game_over():
+        print(ascii_art)
+        print_board()
+        ask_coordinates(player1_turn)
+        player1_turn = not player1_turn
+        os.system('cls' if os.name == 'nt' else 'clear')
+    else:
+        wants_to_play = input("Would you like to continue playing? Type 'y' for yes or 'n' for no: ")
+        while wants_to_play != 'n' and wants_to_play != 'y':
+            print("Sorry, I didn't get that.")
+            wants_to_play = input("Would you like to continue playing? Type 'y' for yes or 'n' for no: ").lower()
+        if wants_to_play == "y":
+            wants_to_play = True
+            board = [
+                [" ", " ", " "],
+                [" ", " ", " "],
+                [" ", " ", " "],
+            ]
+            player1_turn = True
+            os.system('cls' if os.name == 'nt' else 'clear')
+        else:
+            wants_to_play = False
