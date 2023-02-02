@@ -7,7 +7,7 @@
   </h4>
   
 <p align="center">
-    <img src=https://img.shields.io/github/repo-size/mmiskiewicz/tic-tac-toe></img>
+    <img src=https://img.shields.io/github/languages/code-size/mmiskiewicz/tic-tac-toe></img>
   <img src=https://img.shields.io/github/issues-raw/mmiskiewicz/tic-tac-toe></img>
   </p>
   
